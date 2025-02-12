@@ -16,6 +16,11 @@ Antes de ejecutar el proyecto, asegúrate de tener:
 ✅ **Pip y virtualenv** instalados.
 ✅ **Java 11 o superior** (para H2).
 
+Si lo necesitas puedes usar pyenv para manejar diferentes versiones de python
+
+- [Doc](https://github.com/pyenv-win/pyenv-win)
+- [Installation](https://github.com/pyenv-win/pyenv-win/blob/master/docs/installation.md)
+
 ---
 
 ## Instalación
@@ -31,9 +36,25 @@ cd tu_repositorio
 
 ```sh
 python -m venv env
-source env/bin/activate  # En Windows: env\Scripts\activate
-python -m pip install --upgrade pip #actualiza tu entorno
-pip install -r requirements.txt
+```
+En Windows run 
+```sh
+  env\Scripts\activate
+```
+En Mac run 
+```sh
+  source env/bin/activate
+```
+Actualiza tu gestor de paquetes
+
+```sh
+  python -m pip install --upgrade pip
+```
+
+Instala las dependencias
+
+```sh
+  pip install -r requirements.txt
 ```
 
 ---
@@ -78,6 +99,19 @@ Si prefieres SQLite:
 ```python
 DATABASE_URL = "sqlite:///app/DB/test_db.sqlite"
 ```
+---
+
+## Environment Variables
+
+Para levantar este proyecto necesitas agregar las siguientes variables a tu **.env** file:
+
+`API_PREFIX`
+
+Ingresa el valor que prefieras, si no ingresas este valor por defecto se asigna el valor "/demo/api": 
+
+```python
+API_PREFIX = /ruta_personalizada/api
+```
 
 ---
 
@@ -86,12 +120,12 @@ DATABASE_URL = "sqlite:///app/DB/test_db.sqlite"
 Para iniciar la API con **Uvicorn**, ejecuta:
 
 ```sh
-uvicorn app.main:app
+uvicorn main:app
 ```
 Si quieres que la API se recarge en automático al realizar cambios en el cófigo, ejecuta:
 
 ```sh
-uvicorn app.main:app --reload
+uvicorn main:app --reload
 ```
 
 La Documentación de la API estará disponible en el: **Swagger UI de FastApi:** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
@@ -125,7 +159,7 @@ Si deseas ver los `print()` en las pruebas, usa:
 pytest -s app/tests/
 ```
 
-Para limpiar la caché de pytest:
+Para ejecutar limpiaando la caché de pytest:
 
 ```sh
 pytest --cache-clear
@@ -135,12 +169,22 @@ pytest --cache-clear
 
 ## To Do
 
-
+- Agregado de tokens a apis para evitar ejecuciones no autorizadas
+- Mejorar modelos de entidades
+- Agregar validaciones de datos en apis
+- Agregar más productos
 
 ## Contribuciones
 
-Si deseas contribuir, puedes hacer un **fork** del repositorio, crear una nueva rama y hacer un **pull request** con tus cambios.
+Si deseas contribuir, puedes hacer un **fork** del repositorio, crear una nueva rama y hacer un **pull request** con tus cambios a la rama **devel**.
 
-🔹 **Autor:** [Santiago Figueroa](https://github.com/Santiago-Figu)
+## Feedback
+
+Si necesitas contactarme, no dudes en hacerlo a mi correo sfigu@outlook.com
+
+## Authors
+
+- **Autor:** [Santiago Figueroa](https://github.com/Santiago-Figu)
+
 
 
