@@ -28,8 +28,8 @@ Si lo necesitas puedes usar pyenv para manejar diferentes versiones de python
 1️⃣ **Clonar el repositorio:**
 
 ```sh
-git clone https://github.com/tu_usuario/tu_repositorio.git
-cd tu_repositorio
+git clone https://github.com/Santiago-Figu/Crud_Demo_H2.git
+cd Crud_Demo_H2
 ```
 
 2️⃣ **Crear un entorno virtual e instalar dependencias:**
