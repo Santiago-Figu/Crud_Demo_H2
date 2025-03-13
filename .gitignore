@@ -13,6 +13,9 @@ driver_h2/
 #Base de datos
 *.db
 
+#Archivos
+*.zip
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -40,6 +43,9 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+
+# vscode
+.vscode/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template

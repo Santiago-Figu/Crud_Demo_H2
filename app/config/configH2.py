@@ -1,6 +1,5 @@
 import os
 import sqlite3
-from dotenv import load_dotenv
 
 """
     Nota: No utilice jpype para la conexión a H2 por que en mi sistema operativo
@@ -8,15 +7,8 @@ from dotenv import load_dotenv
     
 """
 
-load_dotenv()
-
-# Obtener el valor de API_PREFIX, dede el archivo .env
-def get_api_prefix():
-    """Devuelve el prefijo de la API desde .env, si no encuentra el archivo por defecto asigna /demo/api."""
-    return os.getenv("API_PREFIX", "/demo/api")
-
 # Ruta donse se va a crear el archivo fisico para la base de datos H2
-FILE_DB = os.path.join(os.getcwd(), "app", "DB", "test_db").replace("\\", "/")
+FILE_DB = os.path.join(os.getcwd(), "app", "data_base", "test_db").replace("\\", "/")
 
 # URL de conexión para H2 en modo archivo
 DATABASE_URL = f"{FILE_DB}.db"

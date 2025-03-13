@@ -1,4 +1,4 @@
-from app.config.config import get_db_connection, close_db_connection
+from app.config.configH2 import get_db_connection, close_db_connection
 
 
 def create_table():

@@ -1,8 +1,8 @@
 import pytest
 from fastapi.testclient import TestClient
-from app.config.config import get_api_prefix
+from app.config.configH2 import get_api_prefix
 from main import app
-from app.controller.insumos_controller import create_insumo, delete_insumo
+from app.controller.insumosController import create_insumo, delete_insumo
 from app.models.insumos import Alimento
 
 client = TestClient(app)
