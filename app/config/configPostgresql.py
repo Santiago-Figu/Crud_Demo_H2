@@ -1,9 +1,7 @@
 import sys
 from pathlib import Path
 
-
-
-# Agregar la ruta del proyecto a sys.path para ejecu
+# Agregar la ruta del proyecto a sys.path para ejecución en local
 sys.path.append(str(Path(__file__).resolve().parent.parent.parent))
 
 from app.data_base.postgresqldb import PostgresqlDataBase

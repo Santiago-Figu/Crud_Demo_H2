@@ -1,9 +1,13 @@
 from bcrypt import gensalt, hashpw
+from fastapi import Depends, HTTPException, status
 from sqlalchemy import Column, Integer, String
+from app.auth.jwt import TokenJwt
 from app.config.configPostgresql import Base
+from fastapi.security import OAuth2PasswordBearer
 
 # Obtener la base declarativa
 # attribute_db = PostgreSQLSettings("costos_ventas")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
 class User(Base):
     __tablename__ = "users"
@@ -31,7 +35,8 @@ class CurrentUser:
     def __init__(self):
         self._name = None
         self._email = None
-
+        # Configurar OAuth2PasswordBearer
+        
     @property
     def name(self):
         """Obtener el nombre del usuario."""
@@ -50,4 +55,23 @@ class CurrentUser:
         else:
             self._name = None
             self._email = None
+    
+# Dependencia para validar el token
+def get_current_user(token: str = Depends(oauth2_scheme)):
+    token_jwt = TokenJwt()
+    payload, error = token_jwt.validate_token(token)
+
+    if error:
+        if error == "Token expirado":
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Token expirado"
+            )
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Token inválido"
+            )
+
+    return payload
 
