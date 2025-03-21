@@ -34,7 +34,6 @@ def login(form_data: UserFind, db: Session = Depends(get_db)):
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Contraseña incorrecta"
         )
-
     # Genera el token JWT
     token_data = {
         "sub": str(db_user.id),  # Subject (usuario)
@@ -49,6 +48,3 @@ def login(form_data: UserFind, db: Session = Depends(get_db)):
     auth.get_tokenJwt(token['access_token'])
 
     return token
-
-
-# folio: LS94 Miercoles 9 de marzo, salon mexica, hotel gama xalapa, salón mexica, de 6 a 9 pm
