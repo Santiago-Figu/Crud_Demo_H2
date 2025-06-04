@@ -25,7 +25,17 @@ logger = LoggerConfig().get_logger()
 DATABASE_URL = PostgresqlDataBase().get_url_postgresql()
 
 # Crear motor de SQLAlchemy
-engine = create_engine(DATABASE_URL)
+
+
+if PostgresqlDataBase()._schema == None:
+    logger.info('Inicializando sin schema asignado')
+    engine = create_engine(DATABASE_URL)
+else:
+    logger.info('Inicializando con schema asignado')
+    engine = create_engine(
+        DATABASE_URL,
+        connect_args={"options": f"-c search_path={PostgresqlDataBase()._schema}"}
+    )
 
 # Crear sesión local para interactuar con la base de datos
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -52,9 +62,9 @@ def ensure_database():
     inspector = inspect(engine)
     if not inspector.get_schema_names():
         Base.metadata.create_all(bind=engine)
-        logger.info(f"Base de datos '{PostgresqlDataBase().__dbname}' y tablas creadas exitosamente.")
+        logger.info(f"Base de datos '{PostgresqlDataBase()._dbname}' y tablas creadas exitosamente.")
     else:
-        print(f"La base de datos '{PostgresqlDataBase().__dbname}' ya existe.")
+         logger.info(f"La base de datos '{PostgresqlDataBase()._dbname}' ya existe.")
 
 def test_connection():
     """Prueba de conexión a la base de datos."""
@@ -75,5 +85,6 @@ def test_connection():
 
 if __name__ == "__main__":
     message, status = test_connection()
+    ensure_database()
     logger.info(message)
     logger.info(f"Resultado de la consulta: {status}")

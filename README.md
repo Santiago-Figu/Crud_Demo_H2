@@ -1,3 +1,4 @@
+
 # 🚀 API de Insumos con FastAPI y H2/SQLite 
 
 ## Descripción
@@ -7,14 +8,17 @@ Este proyecto consiste en un CRUD de API´s de testing desarrollada para el proc
 Como tecnologías de desarrollo se ha utilizado **FastAPI**, **Pydantic** y **Uvicorn**, con pruebas unitarias en **pytest**, para probar la inserción de datos desde las funciones del controlador con **sqlite3**, inserción y validación de datos con **Pydantic** desde la api con **Uvicorn**.
 
 ---
-
 ## Requisitos
 
 Antes de ejecutar el proyecto, asegúrate de tener:
 
-✅ **Python 3.11+** instalado. 
-✅ **Pip y virtualenv** instalados.
+✅ **Python 3.11+** instalado.
+
+✅ **Pip y virtualenv** instalados y actualizados.
+
 ✅ **Java 11 o superior** (para H2).
+
+✅ **Instancia de PostgreSQL** con usuarios con permisos de creación (para PostgreSQL).
 
 Si lo necesitas puedes usar pyenv para manejar diferentes versiones de python
 
@@ -22,6 +26,42 @@ Si lo necesitas puedes usar pyenv para manejar diferentes versiones de python
 - [Installation](https://github.com/pyenv-win/pyenv-win/blob/master/docs/installation.md)
 
 ---
+## Environment Variables
+
+Para levantar este proyecto necesitas agregar las siguientes variables a tu **.env** file:
+
+#### PostgreSQL
+`DB_NAME=tu_database_name`
+
+`DB_USER=tu_postgres_user`
+
+`DB_PASSWORD=tu_admin_password`
+
+`DB_HOST=tu_localhost`
+
+`DB_PORT=5432`
+
+`SCHEMA=tu_schema`
+
+#### Django - Configuración
+`DJANGO_SECRET_KEY = tu_django_secret_key`
+
+`ADMIN_PASSWORD=tu_password_admin`
+
+#### Tokens y cifrado
+
+> [!NOTE]
+> Nota en los archivos jwt_utils.py y aes_cipher.py cuentas con funciones para generar tu FERNET_KEY y probar las funciones de cifrado
+
+`SECRET_KEY=tu_secret_key`
+
+`FERNET_KEY=tu_fernet_key`
+
+> [!NOTE]
+Ingresa el valor que prefieras, si no ingresas este valor por defecto se asigna el valor "/demo/api":
+
+`API_PREFIX = tu_ruta_personalizada` 
+
 
 ## Instalación
 
@@ -63,7 +103,7 @@ Instala las dependencias
 
 ### 🔹 **H2 Database Driver**
 
-Para utilizar H2, descarga el driver desde: 🔗 [https://www.h2database.com/html/download.html](https://www.h2database.com/html/download.html)
+Para utilizar H2, descarga el driver H2 🔗 [Driver](https://www.h2database.com/html/download.html)
 
 Después de descargarlo, colócalo en:
 
@@ -73,7 +113,7 @@ app/DB/driver_h2/bin/h2-2.3.232.jar
 
 ### 🔹 **SQLite-JDBC Driver**
 
-Para utilizar SQLite, descarga el driver desde: 🔗 [https://github.com/xerial/sqlite-jdbc](https://github.com/xerial/sqlite-jdbc)
+Para utilizar SQLite, descarga el driver JDBC 🔗 [https://github.com/xerial/sqlite-jdbc](https://github.com/xerial/sqlite-jdbc)
 
 Después de descargarlo, colócalo en:
 
@@ -81,41 +121,24 @@ Después de descargarlo, colócalo en:
 app/DB/driver_sqlite/bin/sqlite-jdbc-3.41.2.jar
 ```
 
----
+## Migraciones
 
-## Configuración
+> [!NOTE]
+> Si quieres crear tus propias Migraciones ejecuta el siguiente comando para crear una nueva migración en la ruta **app\alembic\versions**:
 
-El proyecto utiliza variables de entorno para definir la base de datos:
+```sh
+  alembic revision --autogenerate -m "initial migration"
+```
+Ejecuta las migraciones actuales:
 
-📌 \*\*Configuración en \*\*\`\`:
 
-```python
-H2_JAR_PATH = "app/DB/driver_h2/bin/h2-2.3.232.jar"
-DATABASE_URL = "jdbc:h2:file:./app/DB/test_db;AUTO_SERVER=TRUE"
+```sh
+  alembic upgrade head
 ```
 
-Si prefieres SQLite:
-
-```python
-DATABASE_URL = "sqlite:///app/DB/test_db.sqlite"
-```
----
-
-## Environment Variables
-
-Para levantar este proyecto necesitas agregar las siguientes variables a tu **.env** file:
-
-`API_PREFIX`
-
-Ingresa el valor que prefieras, si no ingresas este valor por defecto se asigna el valor "/demo/api": 
-
-```python
-API_PREFIX = /ruta_personalizada/api
-```
 
 ---
-
-## Ejecutar el Servidor
+## Deployment
 
 Para iniciar la API con **Uvicorn**, ejecuta:
 
@@ -144,8 +167,7 @@ La Documentación de la API estará disponible en el: **Swagger UI de FastApi:**
 | `DELETE` | `/demo/api/insumos/{id}`          | Elimina un insumo                        |
 
 ---
-
-## Ejecutar Pruebas
+## Testing
 
 Para correr las pruebas unitarias con **pytest**, ejecuta:
 
@@ -166,25 +188,18 @@ pytest --cache-clear
 ```
 
 ---
-
-## To Do
+## ToDo
 
 - Agregado de tokens a apis para evitar ejecuciones no autorizadas
 - Mejorar modelos de entidades
 - Agregar validaciones de datos en apis
 - Agregar más productos
-
-## Contribuciones
-
-Si deseas contribuir, puedes hacer un **fork** del repositorio, crear una nueva rama y hacer un **pull request** con tus cambios a la rama **devel**.
-
-## Feedback
-
-Si necesitas contactarme, no dudes en hacerlo a mi correo sfigu@outlook.com
-
 ## Authors
 
 - **Autor:** [Santiago Figueroa](https://github.com/Santiago-Figu)
 
 
+## Feedback
+
+If you have any feedback, please reach out to us at sfigu@outlook.com
 

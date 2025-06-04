@@ -1,3 +1,4 @@
+from app.data_base.postgresqldb import PostgresqlDataBase
 from bcrypt import gensalt, hashpw
 from fastapi import Depends, HTTPException, status
 from sqlalchemy import Column, Integer, String
@@ -11,7 +12,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
 class User(Base):
     __tablename__ = "users"
-    __table_args__ = {"schema": "costos_ventas"}
+    __table_args__ = {"schema": PostgresqlDataBase()._schema}
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, nullable=False)

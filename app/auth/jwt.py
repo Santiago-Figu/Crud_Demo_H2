@@ -81,7 +81,6 @@ class TokenJwt:
             error = "Token inválido"
         finally:
             return payload, error
-
         
     @staticmethod
     def generate_fernet_key():

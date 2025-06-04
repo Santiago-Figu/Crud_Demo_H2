@@ -28,7 +28,7 @@ from app.config.configPostgresql import Base
 # DB_NAME = os.getenv("DB_NAME")
 
 # Construir URL de conexión
-sqlalchemy_url = PostgresqlDataBase().__get_url_postgresql()
+sqlalchemy_url = PostgresqlDataBase().get_url_postgresql()
 
 # Configurar el objeto Alembic Config
 config = context.config
@@ -44,30 +44,28 @@ if config.config_file_name is not None:
 # attribute_db = PostgreSQLSettings("costos_ventas").base
 target_metadata = Base.metadata
 
-def run_migrations_offline() -> None:
-    """Ejecutar migraciones en modo 'offline'.
+def include_object(object, name, type_, reflected, compare_to):
+    """Filtra los objetos del esquema deseado"""
+    if hasattr(object, 'schema'):
+        return object.schema == PostgresqlDataBase()._schema
+    return True
 
-    En este modo, no se requiere una conexión a la base de datos.
-    Las llamadas a context.execute() emiten el SQL generado a la salida del script.
-    """
+def run_migrations_offline() -> None:
     url = config.get_main_option("sqlalchemy.url")
     context.configure(
         url=url,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
-        version_table_schema='costos_ventas',  # Especificar el esquema para alembic_version
-        include_schemas=False,  # Incluir otros esquemas en las migraciones
+        version_table_schema=PostgresqlDataBase()._schema,
+        include_schemas=True,  
+        include_object=include_object  # Filtro para esquema
     )
 
     with context.begin_transaction():
         context.run_migrations()
 
 def run_migrations_online() -> None:
-    """Ejecutar migraciones en modo 'online'.
-
-    En este modo, se requiere una conexión a la base de datos.
-    """
     connectable = engine_from_config(
         config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
@@ -75,11 +73,18 @@ def run_migrations_online() -> None:
     )
 
     with connectable.connect() as connection:
+        # Crea el esquema si no existe
+        try:
+            connection.execute(f"CREATE SCHEMA IF NOT EXISTS {PostgresqlDataBase()._schema}")
+        except:
+            print("No tiene permisos para ejecutar esta acción")
+        
         context.configure(
             connection=connection,
             target_metadata=target_metadata,
-            version_table_schema='costos_ventas',  # Especificar el esquema para alembic_version
-            include_schemas=True,  # Incluir otros esquemas en las migraciones
+            version_table_schema=PostgresqlDataBase()._schema,
+            include_schemas=True,  # Debe ser True en ambos modos
+            include_object=include_object  # Filtramos por esquema
         )
 
         with context.begin_transaction():

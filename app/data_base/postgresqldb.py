@@ -10,6 +10,7 @@ class PostgresqlDataBase():
     password = None
     host = None
     port = None
+    schema = None
 
     def __init__(self):
         self.dbname = os.getenv("DB_NAME", "test_tkinter")
@@ -17,14 +18,19 @@ class PostgresqlDataBase():
         self.password = os.getenv("DB_PASSWORD", "securepassword")
         self.host = os.getenv("DB_HOST", "localhost")
         self.port = os.getenv("DB_PORT", "5432")
+        self.schema = os.getenv("DB_SCHEMA", None)
     
     @property
-    def __dbname(self):
+    def _dbname(self):
         return self.dbname
     
     @property
-    def __host(self):
+    def _host(self):
         return self.host
+    
+    @property
+    def _schema(self):
+        return self.schema
     
     def get_url_postgresql(self):
         """Crear la URL de conexión a la base de datos"""
