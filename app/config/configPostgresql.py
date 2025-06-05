@@ -9,14 +9,14 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker, declarative_base
 from sqlalchemy.exc import SQLAlchemyError
-from app.config.logger import Logger as LoggerConfig
+from app.config.logger import LoggerConfig
 
 
 # Cargar variables desde el archivo .env
 load_dotenv()
 
 # crear instancia del logger
-logger = LoggerConfig().get_logger()
+logger = LoggerConfig(file_name='configPostgreSQL', debug=False).get_logger()
 
 # crear instancia con la informaciíon para conexión a postgresql
 # DB_CONFIG = PostgresqlDataBase()

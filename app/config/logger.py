@@ -2,22 +2,22 @@ import logging
 import os
 import colorlog
 
-class Logger:
+class LoggerConfig:
     __logger = None
 
-    def __init__(self):
+    def __init__(self, file_name: str = "logger", debug: bool = False):
         # crear la carpeta logs si no existe
-        log_dir = os.path.join(os.getcwd(),"logs")
+        log_dir = os.path.join(os.getcwd(),"logs","logger")
         if not os.path.exists(log_dir):
             os.mkdir(log_dir)
 
         # Dar nombre al archivo de log
-        log_file_name = "crud_demo.log"
+        log_file_name = file_name+".log"
         log_file_path = os.path.join(log_dir,log_file_name)
 
         #configuración del logger
-        self.__logger = logging.getLogger("Crud_Demo")
-        self.__logger.setLevel(logging.INFO)
+        self.__logger = logging.getLogger(file_name)
+        self.__logger.setLevel(logging.INFO if debug == False else logging.DEBUG)
 
         #Manejo de Handlers para evitar que se dupliquen instancias del logger si ya existen
         if not self.__logger.handlers:
@@ -56,7 +56,8 @@ class Logger:
                 datefmt='%d/%m/%Y %H:%M:%S',
                 log_colors={
                     'INFO': 'green',          
-                    'WARNING': 'yellow',     
+                    'WARNING': 'yellow',
+                    'DEBUG':'yellow',     
                     'ERROR': 'red',         
                     'CRITICAL': 'red,bg_white',  # Mensajes CRITICAL en rojo con fondo blanco
                 }

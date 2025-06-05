@@ -8,14 +8,14 @@ sys.path.append(str(Path(__file__).resolve().parent.parent.parent))
 
 import os
 from dotenv import load_dotenv
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta, timezone
 from jose import JWTError, jwt
 from cryptography.fernet import Fernet
-from app.config.logger import Logger as LoggerConfig
+from app.config.logger import LoggerConfig
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 # obtener el logger
-logger = LoggerConfig().get_logger()
+logger = LoggerConfig(file_name='jwt_config',debug=True).get_logger()
 
 # Cargar variables desde el archivo .env
 load_dotenv()
@@ -67,16 +67,29 @@ class TokenJwt:
         """Valida el token JWT y devuelve la información del usuario o un error."""
         payload = None
         error = None
+        logger.info('Validando token')
         try:
             # Descifra el token JWT
             decrypted_token = self.cipher_suite.decrypt(token.encode()).decode()
             # Decodifica el token JWT
             payload = jwt.decode(decrypted_token, self.SECRET_KEY, algorithms=[self.ALGORITHM])
+            logger.debug(f'payload: {payload}')
             # Verifica si el token ha expirado
             expire = payload.get("exp")
-            if expire is None or datetime.fromtimestamp(expire) < datetime.now(timezone.utc):
+            if expire is None:
                 error = "Token expirado"
+                logger.error(f"{error}")
+            else:
+                # Convertir la marca de tiempo a datetime con zona horaria UTC
+                expire_datetime = datetime.fromtimestamp(expire, tz=UTC)
+                if expire_datetime < datetime.now(UTC):
+                    error = "Token expirado"
+                    logger.error(f"{error}")
+                logger.info('Token Valido')
         except JWTError as e:
+            logger.error(f"Error al validar el token: {e}")
+            error = "Token inválido"
+        except Exception as e:
             logger.error(f"Error al validar el token: {e}")
             error = "Token inválido"
         finally:

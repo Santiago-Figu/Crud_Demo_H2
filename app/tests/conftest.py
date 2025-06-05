@@ -5,10 +5,10 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parent.parent.parent))
 import os
 import pytest
-from app.config.logger import Logger as LoggerConfig
+from app.config.logger import LoggerConfig
 
 # sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
-logger = LoggerConfig().get_logger()
+logger = LoggerConfig(file_name='testing', debug=True).get_logger()
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_call(item):

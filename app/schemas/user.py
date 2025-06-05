@@ -20,7 +20,6 @@ class UserResponse(BaseModel):
 
 class UserUpdateMail(BaseModel):
     username: str = "Jhondoe"
-    password: str = "securepassword"
     current_email: EmailStr = "johndoe@example.com"
     new_email: EmailStr = "newjohndoe@example.com"
 
